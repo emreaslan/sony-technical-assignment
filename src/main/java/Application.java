@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.lang.System.in;
 
@@ -34,11 +35,12 @@ public class Application {
                 // start with highest degree
                 Comparator<Node> comparator = Comparator.comparing(Node::getDegree);
                 Node nodeMaxDegree = citiesMap.values().stream().max(comparator).get();
-                Node nodeMinDegree = citiesMap.values().stream().min(comparator).get();
 
                 color(nodeMaxDegree, numberOfCities);
 
                 citiesMap.forEach( (k,v) -> System.out.println(v));
+
+                System.out.println( "Output: " + getResult(citiesMap));
 
                 // end of solution
                 --numberOfProblems;
@@ -46,6 +48,78 @@ public class Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static int getResult(Map<Integer, Node> citiesMap) {
+        int step = 0;
+        Set<Node> toBeConnected = new HashSet<>();
+        Map<Integer, Integer> mergeMap = new HashMap<>();
+
+        System.out.println("First CitiesMap= " + citiesMap);
+
+        while (citiesMap.keySet().size() > 1){
+        //for(int tt=0; tt<4; ++tt){
+            Map<Integer, Set<Integer>> degreeMap = citiesMap.values().stream()
+                    .collect(Collectors.groupingBy(Node::getDegree,
+                            Collectors.mapping(Node::getId, Collectors.toSet())));
+
+            System.out.println("DegreeMap= " + degreeMap);
+            int degreeCount = degreeMap.keySet().size();
+
+            degreeMap.keySet().stream().filter(i->i>0)
+                    .forEach(dc->{
+                        degreeMap.get(dc).stream().forEach(i->{
+                            citiesMap.get(i).getNeighbours().stream().forEach(m->{
+                                if (!toBeConnected.contains(m) && !toBeConnected.contains(citiesMap.get(i))){
+                                    toBeConnected.add(m);
+                                    toBeConnected.add(citiesMap.get(i));
+                                    mergeMap.put(m.getId(), i);
+                                }
+                            });
+                        });
+                    });
+
+            System.out.println("MergeMap= " + mergeMap);
+            mergeMap.forEach((k,v) -> {
+                Node m = citiesMap.get(k);
+                Node p = citiesMap.get(v);
+                m.getMergedNodes().add(p.getId());
+                m.getNeighbours().remove(p);
+                p.getNeighbours().stream().filter(n -> n.getId() != m.getId()).forEach(n->{
+                    m.addNeighbour(n);
+                    n.addNeighbour(m);
+                });
+                p.getMergedNodes().stream().forEach(i->m.getMergedNodes().add(i));
+                p.clearAllNeighbours();
+            });
+/*
+            mergeMap.forEach((k,v) -> {
+                Node m = citiesMap.get(k);
+                Node p = citiesMap.get(v);
+                //m.merge(p);
+
+                p.getNeighbours().stream().forEach(n->m.addNeighbour(n));
+                p.getMergedNodes().stream().forEach(i->m.getMergedNodes().add(i));
+                p.clearAllNeighbours();
+                m.getMergedNodes().add(p.getId());
+                m.getNeighbours().remove(p);
+
+            });
+
+ */
+
+            toBeConnected.stream()
+                    .filter(node -> !mergeMap.containsKey(node.getId()))
+                    .filter(node -> node.getNeighbours().isEmpty())
+                    .forEach(node -> citiesMap.remove(node.getId()));
+            mergeMap.clear();
+            toBeConnected.clear();
+            ++step;
+            System.out.println("CitiesMap= " +  citiesMap);
+        }
+        return step;
+
+
     }
 
     private static void color(Node node, int numToBeColored) {
