@@ -3,10 +3,11 @@ package models;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class Node {
     private int id;
-    private Collection<Integer> neighbours;
+    private Collection<Node> neighbours;
     private Color color;
 
     public Node(int id){
@@ -15,7 +16,7 @@ public class Node {
         this.color = Color.NONE;
     }
 
-    public Node(int id, Collection<Integer> neighbours, Color color) {
+    public Node(int id, Collection<Node> neighbours, Color color) {
         this.id = id;
         this.neighbours = neighbours;
         this.color = color;
@@ -25,8 +26,8 @@ public class Node {
         return neighbours.size();
     }
 
-    public void addNeighbour(Integer neighbourId){
-        neighbours.add(neighbourId);
+    public void addNeighbour(Node neighbour){
+        neighbours.add(neighbour);
     }
 
     public int getId() {
@@ -37,11 +38,11 @@ public class Node {
         this.id = id;
     }
 
-    public Collection<Integer> getNeighbours() {
+    public Collection<Node> getNeighbours() {
         return neighbours;
     }
 
-    public void setNeighbours(Collection<Integer> neighbours) {
+    public void setNeighbours(Collection<Node> neighbours) {
         this.neighbours = neighbours;
     }
 
@@ -55,7 +56,8 @@ public class Node {
 
     @Override
     public String toString() {
-        return "{id = " + id + ", neighbours = " + Arrays.toString(neighbours.stream().toArray())
+        return "{id = " + id + ", neighbours = "
+                + Arrays.toString(neighbours.stream().mapToInt(node -> node.getId()).toArray())
                 + ", color = " + color.name() + ", degree = "+ getDegree() + " }";
     }
 }
