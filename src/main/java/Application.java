@@ -1,4 +1,3 @@
-import models.Color;
 import models.Node;
 
 import java.io.BufferedReader;
@@ -30,13 +29,10 @@ public class Application {
                 }
 
                 citiesMap.forEach( (k,v) -> System.out.println(v));
-                // solution
-                // graph coloring with 2 colors
-                // start with highest degree
+
+                //solution
                 Comparator<Node> comparator = Comparator.comparing(Node::getDegree);
                 Node nodeMaxDegree = citiesMap.values().stream().max(comparator).get();
-
-                color(nodeMaxDegree, numberOfCities);
 
                 citiesMap.forEach( (k,v) -> System.out.println(v));
 
@@ -120,39 +116,5 @@ public class Application {
         return step;
 
 
-    }
-
-    private static void color(Node node, int numToBeColored) {
-        Set<Node> visitedSet = new HashSet<>();
-        Stack<Node> toBeColoredNodes = new Stack<>();
-        Stack<Node> nodeStack = new Stack<>();
-
-        Color color = Color.BLACK;
-        node.setColor(color);
-        visitedSet.add(node);
-        node.getNeighbours().stream().forEach(n -> toBeColoredNodes.push(n));
-        --numToBeColored;
-
-        while (numToBeColored>0){
-            color = changeColor(color);
-            while(!toBeColoredNodes.isEmpty()){
-                Node n = toBeColoredNodes.pop();
-                if (!visitedSet.contains(n)){
-                    n.setColor(color);
-                    visitedSet.add(n);
-                    --numToBeColored;
-                    n.getNeighbours().stream().forEach(no -> nodeStack.push(no));
-                }
-            }
-            nodeStack.stream().forEach(node1 -> toBeColoredNodes.push(node1));
-            nodeStack.clear();
-        }
-    }
-
-    private static Color changeColor(Color color) {
-        if (color.equals(Color.BLACK)){
-            return Color.WHITE;
-        }
-        return Color.BLACK;
     }
 }

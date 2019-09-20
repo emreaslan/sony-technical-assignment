@@ -6,18 +6,15 @@ public class Node {
     private int id;
     private Set<Node> neighbours;
     private Set<Integer> mergedNodes = new HashSet<>();
-    private Color color;
 
     public Node(int id){
         this.id = id;
         this.neighbours = new HashSet<>();
-        this.color = Color.NONE;
     }
 
-    public Node(int id, Set<Node> neighbours, Color color) {
+    public Node(int id, Set<Node> neighbours) {
         this.id = id;
         this.neighbours = neighbours;
-        this.color = color;
     }
 
     public void merge(Node node){
@@ -71,13 +68,6 @@ public class Node {
         this.neighbours = neighbours;
     }
 
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
 
     @Override
     public String toString() {
@@ -85,6 +75,6 @@ public class Node {
                 + Arrays.toString(mergedNodes.stream().mapToInt(Integer::intValue).toArray())
                 + ", neighbours = "
                 + Arrays.toString(neighbours.stream().mapToInt(node -> node.getId()).toArray())
-                + ", color = " + color.name() + ", degree = "+ getDegree() + " }";
+                + ", degree = "+ getDegree() + " }";
     }
 }
