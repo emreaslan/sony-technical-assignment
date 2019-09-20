@@ -1,5 +1,5 @@
-import models.GraphProblemGenerator;
-import models.GraphProblemSolver;
+import models.graph.GraphProblemGenerator;
+import models.graph.GraphProblemSolver;
 
 public class Application {
     public static void main(String[] args) {

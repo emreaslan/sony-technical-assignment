@@ -1,5 +1,6 @@
-package models;
+package models.graph;
 
+import models.Node;
 import utils.Messages;
 
 import java.util.*;

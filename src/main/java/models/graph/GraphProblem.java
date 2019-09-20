@@ -1,4 +1,6 @@
-package models;
+package models.graph;
+
+import models.Node;
 
 import java.util.HashMap;
 import java.util.Map;

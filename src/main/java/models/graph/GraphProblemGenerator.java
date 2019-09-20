@@ -1,4 +1,4 @@
-package models;
+package models.graph;
 
 import utils.Messages;
 
