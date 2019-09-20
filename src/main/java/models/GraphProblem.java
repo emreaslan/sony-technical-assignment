@@ -14,10 +14,6 @@ public class GraphProblem {
         return citiesMap;
     }
 
-    public void setCitiesMap(Map<Integer, Node> citiesMap) {
-        this.citiesMap = citiesMap;
-    }
-
     public static class Builder {
         private int numberOfCities;
         private int roads[];
