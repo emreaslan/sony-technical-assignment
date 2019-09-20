@@ -13,17 +13,16 @@ public class Node {
     }
 
     public void merge(Node node){
-        //node.getNeighbours().stream().forEach(n->this.addNeighbour(n));
-        for (Node n: node.neighbours) {
-            neighbours.add(n);
-        }
-        //node.getMergedNodes().stream().forEach(i->this.mergedNodes.add(i));
-        for(Integer i: node.mergedNodes){
-            mergedNodes.add(i);
-        }
+        this.mergedNodes.add(node.id);
+        this.neighbours.remove(node.id);
+        node.neighbours.stream()
+                .filter(n-> n.id != this.id)
+                .forEach(n->{
+                    this.neighbours.add(n);
+                    n.neighbours.add(this);
+                });
+        node.mergedNodes.forEach(n-> this.mergedNodes.add(n));
         node.clearAllNeighbours();
-        mergedNodes.add(node.getId());
-        neighbours.remove(node);
     }
 
     public int getDegree(){

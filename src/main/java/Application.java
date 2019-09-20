@@ -1,3 +1,4 @@
+import models.GraphProblem;
 import models.Node;
 import utils.Messages;
 
@@ -11,23 +12,8 @@ import java.util.stream.Collectors;
 
 public class Application {
 
-    private static Map<Integer, Node> buildQuestion(int numberOfCities, int [] roads){
-        Map<Integer, Node> citiesMap = new HashMap<>();
-        if (numberOfCities == roads.length + 1) {
-            for (int i = 0; i < numberOfCities; ++i) {
-                citiesMap.put(i, new Node(i));
-            }
-
-            for (int i = 0; i < numberOfCities - 1; ++i) {
-                citiesMap.get(i + 1).addNeighbour(citiesMap.get(roads[i]));
-                citiesMap.get(roads[i]).addNeighbour(citiesMap.get(i + 1));
-            }
-        }
-        return citiesMap;
-    }
-
-    public static List getInput(InputStream inputStream) {
-        List<Map<Integer, Node>> problems = new ArrayList<>();
+    public static List<GraphProblem> getInput(InputStream inputStream) {
+        List<GraphProblem> problems = new ArrayList<>();
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream)))
         {
             int numberOfProblems = Integer.parseInt(bufferedReader.readLine());
@@ -36,7 +22,7 @@ public class Application {
                 int numberOfCities = Integer.parseInt(bufferedReader.readLine());
                 int[] roads = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
 
-                problems.add(buildQuestion(numberOfCities, roads));
+                problems.add(new GraphProblem.Builder(roads).withNumberOfCity(numberOfCities).build());
 
                 --numberOfProblems;
             }
@@ -46,10 +32,10 @@ public class Application {
         return problems;
     }
 
-    public static void solveProblems(List<Map<Integer, Node>> problemList) {
+    public static void solveQuestions(List<GraphProblem> problemList) {
         problemList.forEach(problem -> {
             try {
-                System.out.println("Output: " + getResult(problem));
+                System.out.println("Output: " + solveQuestion(problem));
             } catch (Exception e) {
                 System.out.println("Output: " + e.getMessage());
             }
@@ -57,10 +43,11 @@ public class Application {
     }
 
     public static void main(String[] args) {
-        solveProblems(getInput(System.in));
+        solveQuestions(getInput(System.in));
     }
 
-    private static int getResult(Map<Integer, Node> citiesMap) throws Exception {
+    private static int solveQuestion(GraphProblem graphProblem) throws Exception {
+        Map<Integer, Node> citiesMap = graphProblem.getCitiesMap();
         if (citiesMap.isEmpty()) {
             throw new Exception(Messages.INPUT_ERROR_MESSAGE);
         }
@@ -68,14 +55,10 @@ public class Application {
         Set<Node> toBeConnected = new HashSet<>();
         Map<Integer, Integer> mergeMap = new HashMap<>();
 
-        //System.out.println("First CitiesMap= " + citiesMap);
-
         while (citiesMap.keySet().size() > 1) {
             Map<Integer, Set<Integer>> degreeMap = citiesMap.values().stream()
                     .collect(Collectors.groupingBy(Node::getDegree,
                             Collectors.mapping(Node::getId, Collectors.toSet())));
-
-            //System.out.println("DegreeMap= " + degreeMap);
 
             degreeMap.keySet().stream().filter(i -> i > 0)
                     .forEach(dc -> {
@@ -90,18 +73,8 @@ public class Application {
                         });
                     });
 
-            //System.out.println("MergeMap= " + mergeMap);
             mergeMap.forEach((k, v) -> {
-                Node m = citiesMap.get(k);
-                Node p = citiesMap.get(v);
-                m.getMergedNodes().add(p.getId());
-                m.getNeighbours().remove(p);
-                p.getNeighbours().stream().filter(n -> n.getId() != m.getId()).forEach(n -> {
-                    m.addNeighbour(n);
-                    n.addNeighbour(m);
-                });
-                p.getMergedNodes().forEach(i -> m.getMergedNodes().add(i));
-                p.clearAllNeighbours();
+               citiesMap.get(k).merge(citiesMap.get(v));
             });
 
             toBeConnected.stream()
@@ -111,7 +84,6 @@ public class Application {
             mergeMap.clear();
             toBeConnected.clear();
             ++step;
-            //System.out.println("CitiesMap= " + citiesMap);
         }
         return step;
     }
