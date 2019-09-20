@@ -12,11 +12,6 @@ public class Node {
         this.neighbours = new HashSet<>();
     }
 
-    public Node(int id, Set<Node> neighbours) {
-        this.id = id;
-        this.neighbours = neighbours;
-    }
-
     public void merge(Node node){
         //node.getNeighbours().stream().forEach(n->this.addNeighbour(n));
         for (Node n: node.neighbours) {
@@ -39,10 +34,6 @@ public class Node {
         return mergedNodes;
     }
 
-    public void setMergedNodes(Set<Integer> mergedNodes) {
-        this.mergedNodes = mergedNodes;
-    }
-
     public void clearAllNeighbours(){
         neighbours.stream().forEach(n -> n.neighbours.remove(this));
         neighbours.clear();
@@ -56,18 +47,9 @@ public class Node {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public Set<Node> getNeighbours() {
         return neighbours;
     }
-
-    public void setNeighbours(Set<Node> neighbours) {
-        this.neighbours = neighbours;
-    }
-
 
     @Override
     public String toString() {

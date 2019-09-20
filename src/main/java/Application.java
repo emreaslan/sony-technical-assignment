@@ -1,47 +1,47 @@
 import models.Node;
+import utils.Messages;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.lang.System.in;
 
 public class Application {
 
-    public static List getInput() {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
-        List<Map<Integer, Node>> problems = new ArrayList<>();
+    private static Map<Integer, Node> buildQuestion(int numberOfCities, int [] roads){
+        Map<Integer, Node> citiesMap = new HashMap<>();
+        if (numberOfCities == roads.length + 1) {
+            for (int i = 0; i < numberOfCities; ++i) {
+                citiesMap.put(i, new Node(i));
+            }
 
-        try {
+            for (int i = 0; i < numberOfCities - 1; ++i) {
+                citiesMap.get(i + 1).addNeighbour(citiesMap.get(roads[i]));
+                citiesMap.get(roads[i]).addNeighbour(citiesMap.get(i + 1));
+            }
+        }
+        return citiesMap;
+    }
+
+    public static List getInput(InputStream inputStream) {
+        List<Map<Integer, Node>> problems = new ArrayList<>();
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream)))
+        {
             int numberOfProblems = Integer.parseInt(bufferedReader.readLine());
             while (numberOfProblems > 0) {
 
                 int numberOfCities = Integer.parseInt(bufferedReader.readLine());
                 int[] roads = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
 
-                Map<Integer, Node> citiesMap = new HashMap<>();
-                if (numberOfCities == roads.length + 1) {
-                    for (int i = 0; i < numberOfCities; ++i) {
-                        citiesMap.put(i, new Node(i));
-                    }
+                problems.add(buildQuestion(numberOfCities, roads));
 
-                    for (int i = 0; i < numberOfCities - 1; ++i) {
-                        citiesMap.get(i + 1).addNeighbour(citiesMap.get(roads[i]));
-                        citiesMap.get(roads[i]).addNeighbour(citiesMap.get(i + 1));
-                    }
-                }
-
-                //solution
-                problems.add(citiesMap);
-                //System.out.println( "Output: " + getResult(numberOfCities, citiesMap));
-
-                // end of solution
                 --numberOfProblems;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e){
+            System.out.println(Messages.INPUT_ERROR_MESSAGE);
         }
         return problems;
     }
@@ -57,12 +57,12 @@ public class Application {
     }
 
     public static void main(String[] args) {
-        solveProblems(getInput());
+        solveProblems(getInput(System.in));
     }
 
     private static int getResult(Map<Integer, Node> citiesMap) throws Exception {
         if (citiesMap.isEmpty()) {
-            throw new Exception("Input Missmatch Error!");
+            throw new Exception(Messages.INPUT_ERROR_MESSAGE);
         }
         int step = 0;
         Set<Node> toBeConnected = new HashSet<>();
