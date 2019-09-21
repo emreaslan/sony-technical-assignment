@@ -1,24 +1,34 @@
 package models.graph;
 
 import models.Node;
+import utils.ExceptionMessages;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class GraphProblem {
     private Map<Integer, Node> citiesMap;
-
-    private GraphProblem(Map<Integer, Node> citiesMap){
+    private Solver<GraphProblem, Integer> solver;
+    private GraphProblem(Map<Integer, Node> citiesMap, Solver<GraphProblem, Integer> solver){
         this.citiesMap = citiesMap;
+        this.solver = solver;
     }
 
     public Map<Integer, Node> getCitiesMap() {
         return citiesMap;
     }
 
+    public Integer solve() throws Exception {
+        if (solver != null){
+            return solver.solve(this);
+        }
+        throw new Exception(ExceptionMessages.NO_SOLVER_DEFINED);
+    }
+
     public static class Builder {
         private int numberOfCities;
         private int roads[];
+        private Solver solver;
 
         public Builder(int roads[]){
             this.roads = roads;
@@ -26,6 +36,11 @@ public class GraphProblem {
 
         public Builder withNumberOfCity(int numberOfCities){
             this.numberOfCities = numberOfCities;
+            return this;
+        }
+
+        public Builder withSolver(Solver solver){
+            this.solver = solver;
             return this;
         }
 
@@ -48,7 +63,7 @@ public class GraphProblem {
         }
 
         public GraphProblem build(){
-            return new GraphProblem(buildMap());
+            return new GraphProblem(buildMap(), solver);
         }
     }
 }

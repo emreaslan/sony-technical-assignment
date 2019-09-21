@@ -1,22 +1,21 @@
 package models.graph;
 
 import models.Node;
-import utils.Messages;
+import utils.ExceptionMessages;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-public class GraphProblemSolver {
-    private GraphProblem graphProblem;
+public class GraphSolver implements Solver<GraphProblem, Integer> {
 
-    public GraphProblemSolver(GraphProblem graphProblem) {
-        this.graphProblem = graphProblem;
-    }
-
-    public int solve() throws Exception {
-        Map<Integer, Node> citiesMap = graphProblem.getCitiesMap();
+    @Override
+    public Integer solve(GraphProblem problem) throws Exception {
+        Map<Integer, Node> citiesMap = problem.getCitiesMap();
         if (citiesMap.isEmpty()) {
-            throw new Exception(Messages.INPUT_ERROR_MESSAGE);
+            throw new Exception(ExceptionMessages.INPUT_ERROR_MESSAGE);
         }
         int step = 0;
         Set<Node> toBeConnected = new HashSet<>();
@@ -53,15 +52,5 @@ public class GraphProblemSolver {
             ++step;
         }
         return step;
-    }
-
-    public static void solveProblems(List<GraphProblem> problemList) {
-        problemList.forEach(problem -> {
-            try {
-                System.out.println("Output: " + new GraphProblemSolver(problem).solve());
-            } catch (Exception e) {
-                System.out.println("Output: " + e.getMessage());
-            }
-        });
     }
 }

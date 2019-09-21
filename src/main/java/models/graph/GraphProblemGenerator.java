@@ -1,6 +1,6 @@
 package models.graph;
 
-import utils.Messages;
+import utils.ExceptionMessages;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,9 +12,11 @@ import java.util.List;
 
 public class GraphProblemGenerator {
     InputStream inputStream;
+    Solver solver;
 
-    public GraphProblemGenerator(InputStream inputStream) {
+    public GraphProblemGenerator(InputStream inputStream, Solver solver) {
         this.inputStream = inputStream;
+        this.solver = solver;
     }
 
     public List<GraphProblem> generate() {
@@ -27,12 +29,12 @@ public class GraphProblemGenerator {
                 int numberOfCities = Integer.parseInt(bufferedReader.readLine());
                 int[] roads = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
 
-                problems.add(new GraphProblem.Builder(roads).withNumberOfCity(numberOfCities).build());
+                problems.add(new GraphProblem.Builder(roads).withNumberOfCity(numberOfCities).withSolver(solver).build());
 
                 --numberOfProblems;
             }
         } catch (IOException e){
-            System.out.println(Messages.INPUT_ERROR_MESSAGE);
+            System.out.println(ExceptionMessages.INPUT_ERROR_MESSAGE);
         }
         return problems;
     }

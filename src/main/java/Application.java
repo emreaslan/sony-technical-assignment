@@ -1,8 +1,11 @@
 import models.graph.GraphProblemGenerator;
-import models.graph.GraphProblemSolver;
+import models.graph.GraphSolver;
+import models.graph.MultipleGraphProblem;
 
 public class Application {
     public static void main(String[] args) {
-        GraphProblemSolver.solveProblems(new GraphProblemGenerator(System.in).generate());
+        MultipleGraphProblem multipleGraphProblem =
+                new MultipleGraphProblem(new GraphProblemGenerator(System.in, new GraphSolver()).generate());
+        multipleGraphProblem.solveProblems();
     }
 }
