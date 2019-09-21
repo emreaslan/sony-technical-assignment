@@ -11,7 +11,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GraphProblemGenerator {
-    public static List<GraphProblem> generateProblems(InputStream inputStream) {
+    InputStream inputStream;
+
+    public GraphProblemGenerator(InputStream inputStream) {
+        this.inputStream = inputStream;
+    }
+
+    public List<GraphProblem> generate() {
         List<GraphProblem> problems = new ArrayList<>();
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream)))
         {
