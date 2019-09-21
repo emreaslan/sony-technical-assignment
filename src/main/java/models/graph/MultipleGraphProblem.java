@@ -12,9 +12,9 @@ public class MultipleGraphProblem {
     public void solveProblems() {
         graphProblems.forEach(problem -> {
             try {
-                System.out.println("Output: " + problem.solve());
+                System.out.println(problem.solve());
             } catch (Exception e) {
-                System.out.println("Output: " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         });
     }
