@@ -1,5 +1,6 @@
 package models.graph;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MultipleGraphProblem {
@@ -9,13 +10,16 @@ public class MultipleGraphProblem {
         this.graphProblems = graphProblems;
     }
 
-    public void solveProblems() {
+    public List<Integer> solveProblems() {
+        List<Integer> solutions = new ArrayList<>();
         graphProblems.forEach(problem -> {
             try {
-                System.out.println(problem.solve());
+                solutions.add(problem.solve());
             } catch (Exception e) {
+                solutions.add(null);
                 System.out.println(e.getMessage());
             }
         });
+        return solutions;
     }
 }

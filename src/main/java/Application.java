@@ -7,6 +7,6 @@ public class Application {
         MultipleGraphProblem multipleGraphProblem =
                 new MultipleGraphProblem(new GraphProblemGenerator(System.in, new GraphProblemSolver()).generate());
 
-        multipleGraphProblem.solveProblems();
+        multipleGraphProblem.solveProblems().forEach(System.out::println);
     }
 }
