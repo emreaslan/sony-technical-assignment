@@ -29,7 +29,7 @@ public class Node {
         return neighbours.size();
     }
 
-    public Collection<Integer> getMergedNodes() {
+    public Set<Integer> getMergedNodes() {
         return mergedNodes;
     }
 

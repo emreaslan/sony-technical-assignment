@@ -6,6 +6,7 @@ public class Application {
     public static void main(String[] args) {
         MultipleGraphProblem multipleGraphProblem =
                 new MultipleGraphProblem(new GraphProblemGenerator(System.in, new GraphSolver()).generate());
+
         multipleGraphProblem.solveProblems();
     }
 }
