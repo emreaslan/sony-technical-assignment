@@ -1,6 +1,7 @@
 package models.graph;
 
 import utils.ExceptionMessages;
+import validators.IntegerRangeValidator;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,10 +12,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GraphProblemGenerator {
-    InputStream inputStream;
-    Solver solver;
+    private static final int minNumOfCity = 2;
+    private static final int maxNumOfCity = 600;
+    private InputStream inputStream;
+    private GraphProblemSolverIfc solver;
 
-    public GraphProblemGenerator(InputStream inputStream, Solver solver) {
+    public GraphProblemGenerator(InputStream inputStream, GraphProblemSolverIfc solver) {
         this.inputStream = inputStream;
         this.solver = solver;
     }
@@ -27,7 +30,10 @@ public class GraphProblemGenerator {
             while (numberOfProblems > 0) {
 
                 int numberOfCities = Integer.parseInt(bufferedReader.readLine());
+                validateNumberOfCities(numberOfCities);
+
                 int[] roads = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+                validateNumberOfRoads(roads.length, numberOfCities - 1);
 
                 problems.add(new GraphProblem.Builder(roads).withNumberOfCity(numberOfCities).withSolver(solver).build());
 
@@ -35,7 +41,23 @@ public class GraphProblemGenerator {
             }
         } catch (IOException e){
             System.out.println(ExceptionMessages.INPUT_ERROR_MESSAGE);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
         return problems;
+    }
+
+    private void validateNumberOfRoads(int numberOfRoads, int expected) throws Exception {
+        IntegerRangeValidator rangeValidator = new IntegerRangeValidator();
+        if (! rangeValidator.isValidRange(numberOfRoads, expected, expected)){
+            throw new Exception(ExceptionMessages.NUM_OF_ROADS_RANGE_ERR);
+        }
+    }
+
+    private void validateNumberOfCities(int numberOfCities) throws Exception {
+        IntegerRangeValidator rangeValidator = new IntegerRangeValidator();
+        if (! rangeValidator.isValidRange(numberOfCities, minNumOfCity, maxNumOfCity)){
+            throw new Exception(ExceptionMessages.NUM_OF_CITIES_RANGE_ERR);
+        }
     }
 }

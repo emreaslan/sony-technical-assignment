@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class GraphSolver implements Solver<GraphProblem, Integer> {
+public class GraphProblemSolver implements GraphProblemSolverIfc {
 
     @Override
     public Integer solve(GraphProblem problem) throws Exception {

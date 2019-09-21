@@ -1,5 +1,5 @@
 package models.graph;
 
-public interface Solver<P, R> {
+public interface SolverIfc<P, R> {
     R solve(P problem) throws Exception;
 }

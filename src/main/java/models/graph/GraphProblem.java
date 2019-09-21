@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class GraphProblem {
     private Map<Integer, Node> citiesMap;
-    private Solver<GraphProblem, Integer> solver;
-    private GraphProblem(Map<Integer, Node> citiesMap, Solver<GraphProblem, Integer> solver){
+    private GraphProblemSolverIfc solver;
+    private GraphProblem(Map<Integer, Node> citiesMap, GraphProblemSolverIfc solver){
         this.citiesMap = citiesMap;
         this.solver = solver;
     }
@@ -28,7 +28,7 @@ public class GraphProblem {
     public static class Builder {
         private int numberOfCities;
         private int roads[];
-        private Solver solver;
+        private GraphProblemSolverIfc solver;
 
         public Builder(int roads[]){
             this.roads = roads;
@@ -39,7 +39,7 @@ public class GraphProblem {
             return this;
         }
 
-        public Builder withSolver(Solver solver){
+        public Builder withSolver(GraphProblemSolverIfc solver){
             this.solver = solver;
             return this;
         }
