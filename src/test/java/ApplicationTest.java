@@ -109,4 +109,22 @@ class ApplicationTest {
         List<Integer> actual = app.compute();
         assertEquals(actual.size(), 0);
     }
+
+    @Test
+    void errorGraphIsNotAcyclic(){
+        ByteArrayInputStream in = new ByteArrayInputStream("1\n3\n1 1\n".getBytes());
+        System.setIn(in);
+
+        List<Integer> actual = app.compute();
+        assertEquals(actual.size(), 0);
+    }
+
+    @Test
+    void errorGraphIsNotAcyclic2(){
+        ByteArrayInputStream in = new ByteArrayInputStream("1\n4\n2 3 1\n".getBytes());
+        System.setIn(in);
+
+        List<Integer> actual = app.compute();
+        assertEquals(actual.size(), 0);
+    }
 }
