@@ -34,6 +34,7 @@ public class GraphProblemGenerator {
 
                 int[] roads = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
                 validateNumberOfRoads(roads.length, numberOfCities - 1);
+                validateRoadPaths(roads);
 
                 problems.add(new GraphProblem.Builder(roads).withNumberOfCity(numberOfCities).withSolver(solver).build());
 
@@ -45,6 +46,13 @@ public class GraphProblemGenerator {
             System.out.println(e.getMessage());
         }
         return problems;
+    }
+
+    private void validateRoadPaths(int[] roads) throws Exception{
+        IntegerRangeValidator rangeValidator = new IntegerRangeValidator();
+        if (Arrays.stream(roads).anyMatch(i-> !rangeValidator.isValidRange(i, 0, roads.length-1))){
+            throw new Exception(ExceptionMessages.ROAD_PATH_OUT_OF_RANGE_ERR);
+        }
     }
 
     private void validateNumberOfRoads(int numberOfRoads, int expected) throws Exception {
