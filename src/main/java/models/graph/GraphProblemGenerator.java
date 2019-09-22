@@ -39,17 +39,18 @@ public class GraphProblemGenerator {
                 int[] roads = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
                 validateNumberOfRoads(roads.length, numberOfCities - 1);
                 validateRoadPaths(roads);
-                validateGraphIsAcyclic(roads.clone());
+                validateGraphIsAcyclic(roads);
 
                 problems.add(new GraphProblem.Builder(roads).withNumberOfCity(numberOfCities).withSolver(solver).build());
 
                 --numberOfProblems;
             }
+        } catch (NumberFormatException e){
+            System.out.println(ExceptionMessages.NUMBER_FORMAT_ERR);
         } catch (IOException e){
             System.out.println(ExceptionMessages.INPUT_ERROR_MESSAGE);
         } catch (Exception e){
             System.out.println(e.getMessage());
-            e.printStackTrace();
         }
         return problems;
     }
