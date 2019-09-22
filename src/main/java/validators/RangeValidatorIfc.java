@@ -1,5 +1,6 @@
 package validators;
 
-public interface RangeValidatorIfc<T, R> {
-    R isValidRange(T object, T min, T max);
+public interface RangeValidatorIfc<T, M> {
+    Boolean isValidRange(T object, T min, T max);
+    Boolean isValidRange(T object, T min, T max, M exceptionMessage) throws Exception;
 }

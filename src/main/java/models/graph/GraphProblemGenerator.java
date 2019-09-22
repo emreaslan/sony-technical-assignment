@@ -1,10 +1,7 @@
 package models.graph;
 
 import messages.ExceptionMessages;
-import validators.AcyclicGraphValidator;
-import validators.AcyclicGraphValidatorIfc;
-import validators.IntegerRangeValidator;
-import validators.IntegerRangeValidatorIfc;
+import validators.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,70 +15,50 @@ import java.util.stream.IntStream;
 public class GraphProblemGenerator {
     private static final int minNumOfCity = 2;
     private static final int maxNumOfCity = 600;
+    private static final int maxNumOfProblems = 1000;
     private InputStream inputStream;
+    private GraphProblemValidatorIfc<Integer[]> graphProblemValidator;
     private GraphProblemSolverIfc solver;
 
-    public GraphProblemGenerator(InputStream inputStream, GraphProblemSolverIfc solver) {
+    public GraphProblemGenerator(InputStream inputStream, GraphProblemSolverIfc solver,
+                                 GraphProblemValidatorIfc<Integer[]> graphProblemValidator) {
         this.inputStream = inputStream;
         this.solver = solver;
+        this.graphProblemValidator = graphProblemValidator;
     }
 
     public List<GraphProblem> generate() {
         List<GraphProblem> problems = new ArrayList<>();
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream)))
-        {
+        IntegerRangeValidatorIfc rangeValidator = new IntegerRangeValidator();
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
             int numberOfProblems = Integer.parseInt(bufferedReader.readLine());
+            rangeValidator.isValidRange(numberOfProblems, 1, maxNumOfProblems, ExceptionMessages.NUM_OF_PROBLEMS_RANGE_ERR);
             while (numberOfProblems > 0) {
 
                 int numberOfCities = Integer.parseInt(bufferedReader.readLine());
-                validateNumberOfCities(numberOfCities);
+                rangeValidator.isValidRange(numberOfCities, minNumOfCity, maxNumOfCity, ExceptionMessages.NUM_OF_CITIES_RANGE_ERR);
 
-                int[] roads = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-                validateNumberOfRoads(roads.length, numberOfCities - 1);
-                validateRoadPaths(roads);
-                validateGraphIsAcyclic(roads);
+                Integer[] roads = Arrays.stream(bufferedReader.readLine()
+                                        .split(" "))
+                                        .mapToInt(Integer::parseInt)
+                                        .boxed()
+                                        .toArray(Integer[]::new);
+                rangeValidator.isValidRange(roads.length, 0, numberOfCities - 1, ExceptionMessages.NUM_OF_ROADS_RANGE_ERR);
+                graphProblemValidator.isValidGraphProblem(roads);
 
                 problems.add(new GraphProblem.Builder(roads).withNumberOfCity(numberOfCities).withSolver(solver).build());
 
                 --numberOfProblems;
             }
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             System.err.print(ExceptionMessages.NUMBER_FORMAT_ERR);
-        } catch (IOException e){
+        } catch (IOException e) {
             System.err.print(ExceptionMessages.INPUT_ERROR_MESSAGE);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.print(e.getMessage());
         }
         return problems;
     }
 
-    private void validateGraphIsAcyclic(int[] roads) throws Exception{
-        AcyclicGraphValidatorIfc<Integer[]> validator = new AcyclicGraphValidator();
-        Integer[] roadsBoxed = IntStream.of( roads ).boxed().toArray( Integer[]::new );
 
-        if (!validator.isGraphAcyclic(roadsBoxed)){
-            throw new Exception(ExceptionMessages.GRAPH_IS_NOT_ACYCLIC);
-        }
-    }
-
-    private void validateRoadPaths(int[] roads) throws Exception{
-        IntegerRangeValidatorIfc rangeValidator = new IntegerRangeValidator();
-        if (Arrays.stream(roads).anyMatch(i-> !rangeValidator.isValidRange(i, 0, roads.length))){
-            throw new Exception(ExceptionMessages.ROAD_PATH_OUT_OF_RANGE_ERR);
-        }
-    }
-
-    private void validateNumberOfRoads(int numberOfRoads, int expected) throws Exception {
-        IntegerRangeValidatorIfc rangeValidator = new IntegerRangeValidator();
-        if (! rangeValidator.isValidRange(numberOfRoads, expected, expected)){
-            throw new Exception(ExceptionMessages.NUM_OF_ROADS_RANGE_ERR);
-        }
-    }
-
-    private void validateNumberOfCities(int numberOfCities) throws Exception {
-        IntegerRangeValidatorIfc rangeValidator = new IntegerRangeValidator();
-        if (! rangeValidator.isValidRange(numberOfCities, minNumOfCity, maxNumOfCity)){
-            throw new Exception(ExceptionMessages.NUM_OF_CITIES_RANGE_ERR);
-        }
-    }
 }

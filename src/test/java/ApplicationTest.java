@@ -184,4 +184,26 @@ class ApplicationTest {
     void errorNumberFormat4(){
         errorNumberFormatTest("1\n4\n0-1 2\n");
     }
+
+    private void errorNumOfProblemsTest(String input){
+        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+        ByteArrayOutputStream err = new ByteArrayOutputStream();
+        System.setErr(new PrintStream(err));
+
+        List<Integer> actual = Application.compute();
+        assertEquals(actual.size(), 0);
+        assertEquals(ExceptionMessages.NUM_OF_PROBLEMS_RANGE_ERR, err.toString());
+    }
+
+    @Test
+    void errorNumOfProblems(){
+        errorNumOfProblemsTest("0\n");
+    }
+
+    @Test
+    void errorNumOfProblems2(){
+        errorNumOfProblemsTest("1001\n");
+    }
+
 }

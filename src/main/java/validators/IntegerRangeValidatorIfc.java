@@ -1,4 +1,4 @@
 package validators;
 
-public interface IntegerRangeValidatorIfc extends RangeValidatorIfc<Integer, Boolean> {
+public interface IntegerRangeValidatorIfc extends RangeValidatorIfc<Integer, String> {
 }

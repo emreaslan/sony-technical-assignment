@@ -27,10 +27,10 @@ public class GraphProblem {
 
     public static class Builder {
         private int numberOfCities;
-        private int roads[];
+        private Integer roads[];
         private GraphProblemSolverIfc solver;
 
-        public Builder(int roads[]){
+        public Builder(Integer roads[]){
             this.roads = roads;
         }
 
