@@ -46,11 +46,11 @@ public class GraphProblemGenerator {
                 --numberOfProblems;
             }
         } catch (NumberFormatException e){
-            System.out.println(ExceptionMessages.NUMBER_FORMAT_ERR);
+            System.err.print(ExceptionMessages.NUMBER_FORMAT_ERR);
         } catch (IOException e){
-            System.out.println(ExceptionMessages.INPUT_ERROR_MESSAGE);
+            System.err.print(ExceptionMessages.INPUT_ERROR_MESSAGE);
         } catch (Exception e){
-            System.out.println(e.getMessage());
+            System.err.print(e.getMessage());
         }
         return problems;
     }

@@ -1,6 +1,6 @@
 package messages;
 
-public class ExceptionMessages {
+public final class ExceptionMessages {
     public static String NUMBER_FORMAT_ERR = "Number Format Error!";
     public static String INPUT_ERROR_MESSAGE = "Input Mismatch Error!";
     public static String NO_SOLVER_DEFINED = "Solution of this problem is not defined!";

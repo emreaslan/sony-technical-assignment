@@ -17,7 +17,7 @@ public class MultipleGraphProblem {
                 solutions.add(problem.solve());
             } catch (Exception e) {
                 solutions.add(null);
-                System.out.println(e.getMessage());
+                System.err.print(e.getMessage());
             }
         });
         return solutions;
