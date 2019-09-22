@@ -1,7 +1,7 @@
 package models.graph;
 
 import models.Node;
-import utils.ExceptionMessages;
+import messages.ExceptionMessages;
 
 import java.util.HashMap;
 import java.util.Map;

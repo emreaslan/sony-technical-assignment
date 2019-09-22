@@ -1,6 +1,6 @@
 package models.graph;
 
-import utils.ExceptionMessages;
+import messages.ExceptionMessages;
 import validators.AcyclicGraphValidator;
 import validators.AcyclicGraphValidatorIfc;
 import validators.IntegerRangeValidator;

@@ -1,4 +1,4 @@
-package utils;
+package messages;
 
 public class ExceptionMessages {
     public static String INPUT_ERROR_MESSAGE = "Input Missmatch Error!";
