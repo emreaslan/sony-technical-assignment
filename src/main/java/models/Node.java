@@ -2,6 +2,7 @@ package models;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class Node {
@@ -64,13 +65,13 @@ public class Node {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Node)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Node node = (Node) o;
-        return hashCode() == node.hashCode();
+        return id == node.id;
     }
 
     @Override
     public int hashCode() {
-        return toString().hashCode();
+        return Objects.hash(id);
     }
 }

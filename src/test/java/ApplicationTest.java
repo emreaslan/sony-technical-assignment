@@ -61,8 +61,8 @@ class ApplicationTest {
         List<Integer> expected = Stream.of(2,4,5).collect(Collectors.toList());
         List<Integer> actual = Application.compute();
 
-        assertEquals(actual.size(), expected.size());
-        assertIterableEquals(actual, expected);
+        assertEquals(expected.size(), actual.size() );
+        assertIterableEquals(expected, actual);
     }
 
     private void errorNumOfCities(String input){
