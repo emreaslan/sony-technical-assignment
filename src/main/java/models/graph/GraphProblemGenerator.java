@@ -1,7 +1,9 @@
 package models.graph;
 
 import messages.ExceptionMessages;
-import validators.*;
+import validators.GraphProblemValidatorIfc;
+import validators.IntegerRangeValidator;
+import validators.IntegerRangeValidatorIfc;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,7 +12,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class GraphProblemGenerator {
     private static final int minNumOfCity = 2;

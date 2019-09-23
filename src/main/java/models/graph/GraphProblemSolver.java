@@ -26,7 +26,8 @@ public class GraphProblemSolver implements GraphProblemSolverIfc {
                     .collect(Collectors.groupingBy(Node::getDegree,
                             Collectors.mapping(Node::getId, Collectors.toSet())));
 
-            degreeMap.keySet().stream().filter(i -> i > 0)
+            degreeMap.keySet().stream()
+                    .filter(i -> i > 0)
                     .forEach(dc -> {
                         degreeMap.get(dc).stream().forEach(i -> {
                             citiesMap.get(i).getNeighbours().stream().forEach(m -> {

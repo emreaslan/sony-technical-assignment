@@ -1,15 +1,16 @@
 package models;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Node {
     private int id;
-    private Set<Node> neighbours;
+    private Set<Node> neighbours = new HashSet<>();;
     private Set<Integer> mergedNodes = new HashSet<>();
 
     public Node(int id){
         this.id = id;
-        this.neighbours = new HashSet<>();
     }
 
     public void merge(Node node){
@@ -39,7 +40,8 @@ public class Node {
     }
 
     public void addNeighbour(Node neighbour){
-        neighbours.add(neighbour);
+        if (!neighbour.equals(this))
+            neighbours.add(neighbour);
     }
 
     public int getId() {
@@ -53,9 +55,22 @@ public class Node {
     @Override
     public String toString() {
         return "{id = " + id + ", merged = "
-                + Arrays.toString(mergedNodes.stream().mapToInt(Integer::intValue).toArray())
+                + Arrays.toString(mergedNodes.stream().mapToInt(Integer::intValue).sorted().toArray())
                 + ", neighbours = "
-                + Arrays.toString(neighbours.stream().mapToInt(node -> node.getId()).toArray())
+                + Arrays.toString(neighbours.stream().mapToInt(node -> node.getId()).sorted().toArray())
                 + ", degree = "+ getDegree() + " }";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Node)) return false;
+        Node node = (Node) o;
+        return hashCode() == node.hashCode();
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
     }
 }
