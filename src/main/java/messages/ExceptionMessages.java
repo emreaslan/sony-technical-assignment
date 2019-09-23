@@ -9,4 +9,5 @@ public final class ExceptionMessages {
     public static final String ROAD_PATH_OUT_OF_RANGE_ERR = "Road path out of the range!";
     public static final String GRAPH_IS_NOT_ACYCLIC = "Graph is not acyclic!";
     public static final String NUM_OF_PROBLEMS_RANGE_ERR = "Number of problems must be grater than 1 and less than 1001!";
+    public static final String GRAPH_PROBLEM_DEFINITION_ERR = "Graph problem definition error!";
 }

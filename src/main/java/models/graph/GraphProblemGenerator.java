@@ -14,16 +14,17 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GraphProblemGenerator {
-    private static final int minNumOfCity = 2;
-    private static final int maxNumOfCity = 600;
-    private static final int maxNumOfProblems = 1000;
+    private GraphProblemDefinitionIfc problemDefinition;
     private InputStream inputStream;
     private GraphProblemValidatorIfc<Integer[]> graphProblemValidator;
     private GraphProblemSolverIfc solver;
 
-    public GraphProblemGenerator(InputStream inputStream, GraphProblemSolverIfc solver,
+    public GraphProblemGenerator(InputStream inputStream,
+                                 GraphProblemDefinitionIfc problemDefinition,
+                                 GraphProblemSolverIfc solver,
                                  GraphProblemValidatorIfc<Integer[]> graphProblemValidator) {
         this.inputStream = inputStream;
+        this.problemDefinition = problemDefinition;
         this.solver = solver;
         this.graphProblemValidator = graphProblemValidator;
     }
@@ -33,11 +34,13 @@ public class GraphProblemGenerator {
         IntegerRangeValidatorIfc rangeValidator = new IntegerRangeValidator();
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
             int numberOfProblems = Integer.parseInt(bufferedReader.readLine());
-            rangeValidator.isValidRange(numberOfProblems, 1, maxNumOfProblems, ExceptionMessages.NUM_OF_PROBLEMS_RANGE_ERR);
+            rangeValidator.isValidRange(numberOfProblems, problemDefinition.minNumOfProblems(), problemDefinition.maxNumOfProblems(),
+                    ExceptionMessages.NUM_OF_PROBLEMS_RANGE_ERR);
             while (numberOfProblems > 0) {
 
                 int numberOfCities = Integer.parseInt(bufferedReader.readLine());
-                rangeValidator.isValidRange(numberOfCities, minNumOfCity, maxNumOfCity, ExceptionMessages.NUM_OF_CITIES_RANGE_ERR);
+                rangeValidator.isValidRange(numberOfCities, problemDefinition.getMinNumOfCity(),
+                        problemDefinition.getMaxNumOfCity(), ExceptionMessages.NUM_OF_CITIES_RANGE_ERR);
 
                 Integer[] roads = Arrays.stream(bufferedReader.readLine()
                                         .split(" "))
